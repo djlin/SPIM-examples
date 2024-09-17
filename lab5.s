@@ -38,7 +38,26 @@ main:
     syscall
     move $t0, $v0
 
-    # [ implemeent your code here ]
+    #second number
+    li $v0, 4
+    la $a0, prompt2
+    syscall
+
+    li $v0,5        
+        syscall
+    move $t1,$v0
+
+        add $t2, $t1, $t0 #compute the sum
+
+    #print out sum of $t2
+    li $v0, 4       # load syscall print int into $v0
+    #li, $v0,1
+    la, $a0, result
+    syscall
+    
+    add $a0, $t1, $t0 #compute the sum
+    li $v0, 1
+    syscall
 
     # call the power function
     jal power
@@ -51,8 +70,16 @@ main:
 
 power:
     # [ implement the power function here ]
+    sub $sp, $sp, 4
+    sw $ra, 4($sp)
+   if: sub $t1, $v0
+   blez $t1, endif
 
     # return to the function caller
-    jr $ra
+    jal power
+    endif: mul $v0
+    lw $ra, 4($sp)
+    add $sp, $sp, 4
+return: jr $ra
 
 ### End of file
